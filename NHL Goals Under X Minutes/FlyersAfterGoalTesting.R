@@ -1,3 +1,16 @@
+library(nhlapi)
+library(dplyr) 
+library(jsonlite)
+library(stringr)
+library(lubridate)
+
+###########################################################################
+#Not documented yet
+###########################################################################
+
+
+
+
 testJSON <- fromJSON( sprintf("https://api.nhle.com/stats/rest/en/shiftcharts?cayenneExp=gameId=2015020486"))
 testJSON2 <- testJSON[["data"]]
 testJSON2 <- mutate(testJSON2, endTime = period_to_seconds(ms(endTime)), startTime = period_to_seconds(ms(startTime)))
