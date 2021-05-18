@@ -1,5 +1,8 @@
-library(parallel)
-
+library(nhlapi)
+library(dplyr) 
+library(jsonlite)
+library(stringr)
+library(lubridate)
 
 #selecting all NHL teams to just their ID and name
 nhlteams <- nhl_teams() %>%
