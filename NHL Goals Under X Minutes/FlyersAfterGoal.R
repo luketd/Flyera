@@ -1,9 +1,3 @@
-###########################################################################
-#Not documented yet
-###########################################################################
-
-
-
 library(nhlapi)
 library(dplyr) 
 library(jsonlite)
@@ -19,7 +13,8 @@ schedule <- nhlapi:::nhl_from_json("https://statsapi.web.nhl.com/api/v1/schedule
 getgamePK <- schedule[["dates"]][["games"]]
 
 
-goals <- 0
+goalsFor <- 1
+goalsAgainst <- 1
 X <- list()
 for (i in 1:length(getgamePK)) {
   X[i] <- getgamePK[[i]] %>%
@@ -107,18 +102,25 @@ for (gameID in 1:length(X)) {
   } else{
     for (i in 1:length(getGoals$eventDescription) ){
       getShift <- testJSON2 %>%
-        filter(startTime!=0, period == getGoals$period[i] & endTime >= getGoals$endTime[i] & startTime <= getGoals$endTime[i] & endTime !=getGoals$endTime[i]) %>%
-        select(id,firstName, lastName, startTime, endTime,shiftNumber,teamName, duration)
+        filter(startTime!=0, teamName == yourTeamName,  period == getGoals$period[i] & endTime >= getGoals$endTime[i] & startTime <= getGoals$endTime[i] & endTime !=getGoals$endTime[i]) %>%
+        select(firstName, lastName, startTime, endTime,shiftNumber,teamName, duration)
       getShift$goalType <- getGoals$eventDescription[i]
       getShift$goalDef <- getGoals$GoalsDef[i]
       getShift$goalTime <- getGoals$endTime[i]
       getShift$period <- getGoals$period[i]
       getShift$TeamScored <- getGoals$teamName[i]
-      getShift$GoalNumber <- goals
+      getShift$GoalFor <- 0
+      getShift$GoalAgainst <- 0
+      if (getGoals$teamName[i] == yourTeamName){
+        getShift$GoalFor <- goalsFor
+        goalsFor <- goalsFor + 1
+      } else {
+        getShift$GoalAgainst <- goalsAgainst
+        goalsAgainst <- goalsAgainst +1
+      }
       getShift$gameID <- X[[gameID]]
       #mylist[[i]] <- getShift
       TotalShifts <- rbind(TotalShifts, getShift)
-      goals <- goals + 1
     }
     
   }
@@ -129,65 +131,70 @@ for (gameID in 1:length(X)) {
 
 write.csv(TotalShifts,"C:\\Users\\Luke\\Desktop\\SHL\\Shiftaftergoal.csv", row.names = FALSE)
 
+###########################
+#concatenate first and last name
+
+TotalShifts$fullName <- paste(TotalShifts$firstName, TotalShifts$lastName, sep= " ")
 
 
 
+####################################
+#split the data up to the count of shifts a player was out after a EVG, PPG, and SHG after an opposing team scored
 
-#startTime!=0, period == getGoals$period[1] & endTime >= getGoals$endTime[1] & startTime <= getGoals$endTime[1] & endTime !=getGoals$endTime[1]
-nhl_teams_rosters(teamIds = 4, seasons = NULL)
-
-test <- nhl_games_linescore(2020020716)
-
-
-testing2 <- nhl_teams_shedule_previous(teamIds =4)
-
-
-schedule <- nhlapi:::nhl_from_json("https://statsapi.web.nhl.com/api/v1/schedule?season=20202021&teamId=4&gameTypes=R") 
-
-getgamePK <- schedule[["dates"]][["games"]]
+#Total
+OppScored <- TotalShifts %>%
+  filter(TeamScored != yourTeamName) %>%
+  group_by(fullName) %>%
+  tally()
 
 
+#EVG
+evgOppScored <- TotalShifts %>%
+  filter(TeamScored != yourTeamName, goalType=="EVG") %>%
+  group_by(fullName) %>%
+  tally()
 
-X <- list()
-for (i in 1:56) {
-  X[i] <- getgamePK[[i]] %>%
-    select(gamePk)
-  print(X)
-}
-
-
-getBoxscores <- nhl_games_feed(X[[1]])
-
-l <- getBoxscores[[1]][["liveData"]][["plays"]][["allPlays"]]
-
-
-getGoals <- l %>%
-  filter(result.event == "Goal") %>%
-  add_column(time_after_other_goal = )
+#PPG
+ppgOppScored <- TotalShifts %>%
+  filter(TeamScored != yourTeamName, goalType=="PPG") %>%
+  group_by(fullName) %>%
+  tally()
 
 
+#SHG
+shgOppScored <- TotalShifts %>%
+  filter(TeamScored != yourTeamName, goalType=="SHG") %>%
+  group_by(fullName) %>%
+  tally()
 
-write.csv(getGoals,"C:\\Users\\Luke\\Desktop\\SHL\\sheeesh.csv", row.names = FALSE)
+###########################################################
+#split the data up to the count of shifts a player was out after a EVG, PPG, and SHG after your team scored
 
-
-x <- getBoxscores[[1]][["gameData"]]
-
-
-
-
-
-
-
-
-
-
-
+#Total
+TeamScored <- TotalShifts %>%
+  filter(TeamScored == yourTeamName) %>%
+  group_by(fullName) %>%
+  tally()
 
 
+#EVG
+evgTeamScored <- TotalShifts %>%
+  filter(TeamScored == yourTeamName, goalType=="EVG") %>%
+  group_by(fullName) %>%
+  tally()
+
+#PPG
+ppgTeamScored <- TotalShifts %>%
+  filter(TeamScored == yourTeamName, goalType=="PPG") %>%
+  group_by(fullName) %>%
+  tally()
 
 
-
-
+#SHG
+shgTeamScored <- TotalShifts %>%
+  filter(TeamScored == yourTeamName, goalType=="SHG") %>%
+  group_by(fullName) %>%
+  tally()
 
 
 
