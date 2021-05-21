@@ -2,7 +2,7 @@
 
 # FlyersAfterGoal
 What this file is, is a collection of shift by shift data on who was put out after a goal was scored. What is presented is
-* FirstName, LastName, StartTime(seconds), endTime(seconds), shiftNumber, team, duration of shift(seconds), goalType, goalDef, GoalTime(seconds), Period, Team Scored, gameID
+* FirstName, LastName, StartTime(seconds), endTime(seconds), shiftNumber, team, duration of shift(seconds), goalType, goalDef, GoalTime(seconds), Period, Team Scored, #Goal For, #Goal Against, gameID
 * goalType
    * EVG = Even Strength Goal
    * PPG = Power Play Goal
