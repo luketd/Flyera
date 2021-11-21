@@ -61,8 +61,8 @@ For example, for the Philadelphia Flyers, this is the count of which players wer
 ## The goal of this and TeamGoalsafterXMin_SingleSeason is to extract the following data
 * The basic information of Team Name, The Year, Games Played, Goals For, and Goals against
 * Then the specific data we are pulling 
-    * n = The amount of goals that happened to that team, that happened 2 minutes or less after another goal was scored
-    * n.1 = The amount of goals against that happened to the team, that happened 2 minutes or less after another goal was scored
+    * n = The amount of goals that happened for or against the team, that happened 2 minutes or less after another goal was scored
+    * n.1 = The amount of goals against that happened against the team, that happened 2 minutes or less after another goal was scored
         * n.2 = The normalized version of n.1 which is n.1 / GA
     * g = The amount of goals against that happened to the team, after your team has scored a goal
         * g.GA = the normalized version of g, which is g / GA
