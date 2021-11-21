@@ -81,6 +81,7 @@ The result should be each team from the season's and time that you chosen in a d
 | Philadelphia Flyers   | 2019/2020 | 72          | 236 | 199 | 73  | 38  | 0.190954773869347  | 17 | 0.085427135678392  | 35  | 0.148305084745763  | 13 | 0.0550847457627119 |
 | Philadelphia Flyers   | 2020/2021 | 56          | 159 | 197 | 57  | 40  | 0.203045685279188  | 16 | 0.0812182741116751 | 17  | 0.106918238993711  | 8  | 0.050314465408805  |
 
+https://public.tableau.com/app/profile/luke.td/viz/GoalsScoredbefore2minutes/Dashboard2?publish=yes
 
 
 # TeamGoalsafterXMin_SingleSeason
